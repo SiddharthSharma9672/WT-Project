@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hawai Book Store — Stories, science and skills</title>
+<style>
+:root{--bg:#f5f3ee;--card:#fff;--ink:#1b1f2a;--muted:#667085;--line:#e3dfd6;--accent:#2b44d6;--hot:#ff6b3d;--dark:#12162b;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1220;--card:#181c33;--ink:#eceefb;--muted:#9aa3c7;--line:#262b4a;--accent:#7f93ff;--dark:#080a16;color-scheme:dark}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Georgia,'Times New Roman',serif;background:var(--bg);color:var(--ink);line-height:1.6}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+.sans{font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
+:focus-visible{outline:3px solid var(--hot);outline-offset:2px}
+header{position:sticky;top:0;z-index:20;background:var(--dark);color:#fff;font-family:system-ui,sans-serif}
+.bar{max-width:1120px;margin:auto;padding:14px 20px;display:flex;align-items:center;gap:20px}
+.logo{font:700 1.3rem Georgia,serif;letter-spacing:.2px}.logo b{color:var(--hot)}
+.bar nav{margin-left:auto;display:flex;gap:20px;font-size:.92rem}
+.bar nav a{opacity:.8}.bar nav a:hover{opacity:1}
+.cartbtn{background:var(--hot);border:0;color:#fff;font-weight:600;padding:8px 16px;border-radius:999px;cursor:pointer}
+.hero{background:var(--dark);color:#fff;padding:64px 20px 80px}
+.hero-in{max-width:1120px;margin:auto;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.1;font-weight:700}
+.hero p{margin-top:18px;max-width:46ch;color:#c4c9e6;font-family:system-ui,sans-serif}
+.cta{display:inline-block;margin-top:26px;background:var(--hot);color:#fff;padding:12px 26px;border-radius:8px;font:600 .95rem system-ui,sans-serif}
+.shelf{display:flex;justify-content:center;gap:14px;align-items:flex-end}
+.shelf svg{width:30%;border-radius:4px 8px 8px 4px;box-shadow:0 18px 30px rgba(0,0,0,.45)}
+.shelf svg:nth-child(2){transform:translateY(-22px)}
+main{max-width:1120px;margin:auto;padding:0 20px}
+section{padding:56px 0}
+h2{font-size:1.8rem}
+.sub{color:var(--muted);font-family:system-ui,sans-serif;margin-top:4px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}
+.tools input,.tools select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-family:system-ui,sans-serif}
+.tools input{flex:1;min-width:200px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px;font-family:system-ui,sans-serif}
+.chip{background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 16px;cursor:pointer;font-size:.88rem}
+.chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:26px}
+.book{display:flex;flex-direction:column}
+.cover{border-radius:4px 10px 10px 4px;overflow:hidden;box-shadow:0 10px 24px rgba(20,24,50,.22);transition:transform .25s}
+.book:hover .cover{transform:translateY(-6px)}
+.cover svg{display:block;width:100%;height:auto}
+.book h3{font-size:1.05rem;margin-top:14px;line-height:1.3}
+.by{font:.85rem system-ui,sans-serif;color:var(--muted)}
+.meta{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-family:system-ui,sans-serif}
+.price{font-weight:700}.price s{color:var(--muted);font-weight:400;font-size:.82rem;margin-left:6px}
+.add{background:var(--ink);color:var(--bg);border:0;border-radius:6px;padding:7px 14px;font-size:.85rem;cursor:pointer}
+.add:hover{background:var(--accent);color:#fff}
+.tag{align-self:flex-start;font:600 .7rem system-ui,sans-serif;color:var(--accent);margin-top:12px}
+.empty{padding:40px;text-align:center;color:var(--muted);font-family:system-ui,sans-serif}
+.promo{background:var(--accent);color:#fff;border-radius:16px;padding:40px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;font-family:system-ui,sans-serif}
+.promo h2{font-family:Georgia,serif}
+.code{background:#fff;color:var(--accent);font:700 1.2rem ui-monospace,monospace;padding:10px 20px;border-radius:8px;cursor:pointer;border:0}
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:20px;font-family:system-ui,sans-serif}
+form{display:grid;gap:10px}
+form input,form textarea{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:11px 14px;width:100%}
+form button{justify-self:start;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:11px 24px;font-weight:600;cursor:pointer}
+footer{background:var(--dark);color:#9aa3c7;text-align:center;padding:28px 20px;font:.85rem system-ui,sans-serif}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,80px);background:var(--ink);color:var(--bg);padding:11px 20px;border-radius:8px;font-family:system-ui,sans-serif;transition:.3s;z-index:40}
+#toast.on{transform:translate(-50%,0)}
+@media(max-width:760px){.hero-in,.contact{grid-template-columns:1fr}.bar nav{display:none}.bar .cartbtn{margin-left:auto}.shelf{order:-1}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header><div class="bar"><a class="logo" href="#top">Hawai<b> Books</b></a>
+<nav><a href="#shop">Shop</a><a href="#offer">Offer</a><a href="#contact">Contact</a></nav>
+<button class="cartbtn" id="cartbtn" type="button">Cart: <span id="cn">0</span> · ₹<span id="ct">0</span></button></div></header>
+
+<div class="hero" id="top"><div class="hero-in">
+<div><h1>Find the next book you can’t put down.</h1>
+<p>Fiction, science, business and coding books, picked by readers and delivered across India in 3–5 days.</p>
+<a class="cta" href="#shop">Browse the shelf</a></div>
+<div class="shelf" id="shelf"></div></div></div>
+
+<main>
+<section id="shop">
+<h2>The shelf</h2><p class="sub" id="count"></p>
+<div class="tools"><input type="search" id="q" placeholder="Search by title or author" aria-label="Search books">
+<select id="sort" aria-label="Sort books"><option value="">Sort: Featured</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option><option value="az">Title: A to Z</option></select></div>
+<div class="chips" id="chips"></div>
+<div class="grid" id="grid"></div>
+</section>
+
+<section id="offer"><div class="promo"><div><h2>Read more, pay less</h2><p>Take 15% off any order of three books or more.</p></div>
+<button class="code" id="code" type="button" title="Copy code">HAWAI15</button></div></section>
+
+<section id="contact"><h2>Talk to us</h2><div class="contact">
+<div><p>📍 12 Reader’s Lane, Jaipur, Rajasthan</p><p>📞 +91 90000 00000</p><p>✉️ hello@hawaibooks.example</p><p>🕘 Mon–Sat, 9 AM – 8 PM</p></div>
+<form id="form"><input id="n" placeholder="Your name" required><input id="e" type="email" placeholder="Your email" required><textarea id="m" rows="3" placeholder="Your message" required></textarea><button type="submit">Send message</button></form>
+</div></section>
+</main>
+<footer>© 2026 Hawai Book Store. All rights reserved.</footer>
+<div id="toast" role="status"></div>
+
+<script>
+/* Each book gets a hand-built SVG cover: [bg1, bg2, ink, motif] */
+const B=[
+{t:["The Lantern","Cartographer"],a:"Mira Anand",c:"Fiction",p:399,o:499,s:["#1d2b64","#f8cdda","#fff","lantern"],tag:"Bestseller"},
+{t:["Salt &","Static"],a:"Dev Malhotra",c:"Fiction",p:349,o:429,s:["#0f4c5c","#5fa8b4","#fff","waves"]},
+{t:["Midnight","Orchard"],a:"Sana Qureshi",c:"Fiction",p:299,o:0,s:["#2a1b4d","#7b4fd6","#ffe08a","moon"],tag:"New"},
+{t:["How Stars","Are Made"],a:"Dr. R. Iyer",c:"Science",p:549,o:649,s:["#05071a","#243b8f","#fff","planet"]},
+{t:["The Quiet","Forest"],a:"Lena Fischer",c:"Science",p:429,o:0,s:["#14532d","#86c78f","#fff","trees"]},
+{t:["Python in","Practice"],a:"Karan Bhatt",c:"Coding",p:649,o:799,s:["#111827","#10b981","#d1fae5","code"],tag:"Bestseller"},
+{t:["Clean Data,","Clear Mind"],a:"Priya Nair",c:"Coding",p:599,o:0,s:["#7c2d12","#fb923c","#fff","bars"],tag:"New"},
+{t:["The One-Page","Business"],a:"Arjun Mehta",c:"Business",p:379,o:449,s:["#3b0d1e","#d94f70","#fff","city"]},
+{t:["Small Habits,","Big Years"],a:"Ritu Kapoor",c:"Business",p:329,o:399,s:["#92400e","#fcd34d","#3b1d05","sun"]},
+{t:["Dragon of","Tin Hill"],a:"Neel & Tara",c:"Kids",p:249,o:0,s:["#0c4a6e","#38bdf8","#fff","hills"],tag:"New"},
+{t:["Pip Finds","the Moon"],a:"Tara Joshi",c:"Kids",p:229,o:279,s:["#4c1d95","#f0abfc","#fff","moon"]},
+{t:["A History","of Rivers"],a:"Prof. S. Rao",c:"History",p:699,o:0,s:["#1e3a5f","#8ab4d8","#fff","waves"]}
+,{t:["Palms &","Paper Lanterns"],a:"Kiana Mahoe",c:"Travel",p:449,o:549,s:["#0e7490","#fbbf24","#fff","palm"],tag:"Bestseller"}
+,{t:["Island","Kitchen"],a:"Leilani Cruz",c:"Cooking",p:499,o:0,s:["#9a3412","#fdba74","#fff","flower"],tag:"New"}
+,{t:["Trade Winds","& Harbours"],a:"Omar Siddiqui",c:"Travel",p:399,o:0,s:["#075985","#7dd3fc","#fff","waves"]}
+,{t:["Volcano","Summer"],a:"Noa Kalani",c:"Fiction",p:379,o:449,s:["#450a0a","#f97316","#fff","volcano"],tag:"New"}
+,{t:["The Hibiscus","Letters"],a:"Anika Rao",c:"Fiction",p:329,o:0,s:["#831843","#f9a8d4","#fff","flower"]}
+,{t:["Reef Life","Handbook"],a:"Dr. Mele Park",c:"Science",p:599,o:699,s:["#134e4a","#2dd4bf","#fff","waves"]}
+,{t:["Sky Over","the Pacific"],a:"Dr. R. Iyer",c:"Science",p:529,o:0,s:["#1e1b4b","#6366f1","#fde68a","planet"]}
+,{t:["Learning","from Data"],a:"Priya Nair",c:"Coding",p:699,o:849,s:["#172554","#60a5fa","#fff","bars"]}
+,{t:["Web Apps","from Scratch"],a:"Karan Bhatt",c:"Coding",p:579,o:0,s:["#3f3f46","#a78bfa","#fff","code"],tag:"New"}
+,{t:["Money Made","Simple"],a:"Arjun Mehta",c:"Business",p:349,o:429,s:["#14532d","#bef264","#052e16","sun"]}
+,{t:["Leading","Quietly"],a:"Ritu Kapoor",c:"Business",p:399,o:0,s:["#27272a","#f59e0b","#fff","city"]}
+,{t:["Coco the","Little Crab"],a:"Tara Joshi",c:"Kids",p:259,o:0,s:["#be123c","#fda4af","#fff","waves"],tag:"New"}
+,{t:["Hula the","Brave Turtle"],a:"Neel & Tara",c:"Kids",p:239,o:299,s:["#047857","#6ee7b7","#fff","palm"]}
+,{t:["Empires of","the Sea"],a:"Prof. S. Rao",c:"History",p:749,o:0,s:["#1c1917","#a8a29e","#fef3c7","volcano"]}
+];
+const M={
+palm:'<path d="M150 245q-8-70 4-125" fill="none" stroke="F" stroke-width="8" stroke-linecap="round"/><g fill="F"><path d="M154 120q-50-30-90 10q50-10 90-10z"/><path d="M154 120q50-30 90 10q-50-10-90-10z"/><path d="M154 120q-30-50-70-40q40 0 70 40z" opacity=".8"/><path d="M154 120q30-50 70-40q-40 0-70 40z" opacity=".8"/></g><path d="M60 248h180" stroke="F" stroke-width="5" opacity=".5"/>',
+volcano:'<path d="M40 245l80-115h60l80 115z" fill="F" opacity=".85"/><g fill="F" opacity=".6"><circle cx="150" cy="108" r="12"/><circle cx="172" cy="82" r="8"/><circle cx="138" cy="74" r="6"/></g>',
+flower:'<g fill="F" opacity=".9"><circle cx="150" cy="130" r="26"/><circle cx="190" cy="160" r="26"/><circle cx="175" cy="205" r="26"/><circle cx="125" cy="205" r="26"/><circle cx="110" cy="160" r="26"/></g><circle cx="150" cy="168" r="10" fill="#000" opacity=".3"/>',
+lantern:'<path d="M150 90v40M120 130h60l8 70h-76z" fill="none" stroke="F" stroke-width="5"/><circle cx="150" cy="168" r="14" fill="F"/>',
+waves:'<g fill="none" stroke="F" stroke-width="5"><path d="M30 150q30-24 60 0t60 0t60 0t60 0"/><path d="M30 185q30-24 60 0t60 0t60 0t60 0" opacity=".6"/><path d="M30 220q30-24 60 0t60 0t60 0t60 0" opacity=".35"/></g><circle cx="215" cy="100" r="22" fill="F"/>',
+moon:'<path d="M175 90a60 60 0 1 0 50 90a50 50 0 0 1-50-90z" fill="F"/><circle cx="90" cy="110" r="3" fill="F"/><circle cx="120" cy="80" r="2" fill="F"/><circle cx="230" cy="210" r="3" fill="F"/><circle cx="70" cy="190" r="2" fill="F"/>',
+planet:'<circle cx="150" cy="160" r="48" fill="F" opacity=".9"/><ellipse cx="150" cy="160" rx="92" ry="20" fill="none" stroke="F" stroke-width="5" transform="rotate(-18 150 160)"/><circle cx="60" cy="90" r="2.5" fill="F"/><circle cx="240" cy="95" r="2" fill="F"/><circle cx="85" cy="230" r="2" fill="F"/>',
+trees:'<g fill="F"><path d="M80 230l30-90 30 90z"/><path d="M130 240l40-120 40 120z" opacity=".8"/><path d="M185 230l25-70 25 70z" opacity=".6"/></g>',
+code:'<g fill="none" stroke="F" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M110 120l-45 40 45 40"/><path d="M190 120l45 40-45 40"/><path d="M165 110l-30 100" opacity=".7"/></g>',
+bars:'<g fill="F"><rect x="70" y="170" width="30" height="60" opacity=".5"/><rect x="115" y="140" width="30" height="90" opacity=".7"/><rect x="160" y="110" width="30" height="120"/><rect x="205" y="150" width="30" height="80" opacity=".6"/></g>',
+city:'<g fill="F"><rect x="60" y="150" width="40" height="80" opacity=".6"/><rect x="108" y="110" width="50" height="120"/><rect x="166" y="140" width="36" height="90" opacity=".75"/><rect x="210" y="170" width="34" height="60" opacity=".5"/></g>',
+sun:'<circle cx="150" cy="160" r="42" fill="F"/><g stroke="F" stroke-width="6" stroke-linecap="round"><path d="M150 85v-18M150 235v18M75 160H57M243 160h-18M97 107L84 94M203 213l13 13M203 107l13-13M97 213L84 226"/></g>',
+hills:'<g fill="F"><path d="M20 240q70-110 140 0z" opacity=".55"/><path d="M110 240q80-140 170 0z" opacity=".8"/></g><circle cx="230" cy="100" r="18" fill="F"/>'
+};
+function cover(b,w){
+  const [c1,c2,f,m]=b.s,id='g'+Math.random().toString(36).slice(2,7);
+  return `<svg viewBox="0 0 300 420" role="img" aria-label="Cover of ${b.t.join(' ')}"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs>
+<rect width="300" height="420" fill="url(#${id})"/><rect x="0" y="0" width="14" height="420" fill="#000" opacity=".18"/>
+${M[m].replace(/F/g,f)}
+<g fill="${f}" font-family="Georgia,serif" font-weight="700" text-anchor="middle"><text x="157" y="298" font-size="30">${b.t[0].replace(/&/g,'&amp;')}</text><text x="157" y="334" font-size="30">${b.t[1].replace(/&/g,'&amp;')}</text><text x="157" y="385" font-size="15" font-weight="400" opacity=".85">${b.a.replace(/&/g,'&amp;')}</text></g></svg>`;
+}
+const $=i=>document.getElementById(i);
+let cat="All",cart={};
+const cats=["All",...new Set(B.map(b=>b.c))];
+$("shelf").innerHTML=[0,3,5].map(i=>cover(B[i])).join("");
+$("chips").innerHTML=cats.map(c=>`<button class="chip" type="button" aria-pressed="${c==cat}" data-c="${c}">${c}</button>`).join("");
+function render(){
+  const q=$("q").value.trim().toLowerCase(),s=$("sort").value;
+  let L=B.map((b,i)=>({...b,i})).filter(b=>(cat=="All"||b.c==cat)&&(b.t.join(" ")+" "+b.a).toLowerCase().includes(q));
+  if(s=="lo")L.sort((x,y)=>x.p-y.p);if(s=="hi")L.sort((x,y)=>y.p-x.p);
+  if(s=="az")L.sort((x,y)=>x.t.join(" ").localeCompare(y.t.join(" ")));
+  $("count").textContent=L.length+" book"+(L.length==1?"":"s")+(cat=="All"?"":" in "+cat);
+  $("grid").innerHTML=L.length?L.map(b=>`<article class="book"><div class="cover">${cover(b)}</div>${b.tag?`<span class="tag">${b.tag.toUpperCase()}</span>`:""}<h3>${b.t.join(" ")}</h3><div class="by">${b.a} · ${b.c}</div><div class="meta"><span class="price">₹${b.p}${b.o?`<s>₹${b.o}</s>`:""}</span><button class="add" type="button" data-i="${b.i}">Add</button></div></article>`).join(""):'<p class="empty">No books match your search. Try another title or author.</p>';
+}
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),1800)}
+function sum(){let n=0,t=0;for(const i in cart){n+=cart[i];t+=cart[i]*B[i].p}
+  const d=n>=3?Math.round(t*.15):0;$("cn").textContent=n;$("ct").textContent=t-d;return{n,t,d}}
+$("chips").onclick=e=>{const c=e.target.dataset.c;if(!c)return;cat=c;document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.c==c));render()};
+$("grid").onclick=e=>{const i=e.target.dataset.i;if(i===undefined)return;cart[i]=(cart[i]||0)+1;const r=sum();toast(B[i].t.join(" ")+" added"+(r.d?" · HAWAI15 applied":""))};
+$("cartbtn").onclick=()=>{const r=sum();toast(r.n?r.n+" item(s) · saved ₹"+r.d:"Your cart is empty")};
+$("q").oninput=render;$("sort").onchange=render;
+$("code").onclick=()=>{try{navigator.clipboard.writeText("HAWAI15")}catch(x){}toast("Code HAWAI15 copied")};
+$("form").onsubmit=e=>{e.preventDefault();e.target.reset();toast("Thanks! We’ll reply soon.")};
+render();
+</script>
+</body>
+</html>
